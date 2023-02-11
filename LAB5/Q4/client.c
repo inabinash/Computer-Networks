@@ -1,26 +1,44 @@
 #include<sys/types.h>
 #include<sys/socket.h>
-#include<netinet/in.h>
 #include<stdio.h>
-#include<unistd.h>
-#include<stdlib.h>
+#include<netinet/in.h> 
+#include <unistd.h>
+#include<string.h> 
+#include<strings.h>
+#include <arpa/inet.h>
 
+//#define buffsize  150
+void main()
+{
+	int b,sockfd,sin_size,con,n,len;
+	//char buff[256];
+	char operator;
+	int op1,op2,result;
+	if((sockfd=socket(AF_INET,SOCK_STREAM,0))>0)
+	printf("socket created sucessfully\n");
+	//printf("%d\n", sockfd);
+	struct sockaddr_in servaddr;
 
-int main(){
-    int sid;char c;
-    struct sockaddr_in server_address;
-    int server_addlen;
-    server_address.sin_family=AF_INET;
-    server_address.sin_addr.s_addr=inet_addr("127.0.0.1");
-    server_address.sin_port=7890;
+	servaddr.sin_family=AF_INET;
+	servaddr.sin_addr.s_addr=inet_addr("127.0.0.1");
+	servaddr.sin_port=6006;
 
-    server_addlen=sizeof(server_address);
-    sid=socket(AF_INET,SOCK_DGRAM,0);
-    sendto(sid,"A",1,0,(struct sockaddr *)&server_address,server_addlen);
-    recvfrom(sid,&c,1,0,(struct sockaddr *)&server_address,&server_addlen);
-    printf("Character from server is %c\n",c);
-    return 0;
-
-
-
+	sin_size = sizeof(struct sockaddr_in);
+	if((con=connect(sockfd,(struct sockaddr *) &servaddr, sin_size))==0); //initiate a connection on a socket
+	printf("connect sucessful\n");
+	printf("Enter operation:\n +:Addition \n -: Subtraction \n /: Division \n*:Multiplication \n#:To check Prime number \n");
+	scanf("%c",&operator);
+	if(operator=='#'){
+	printf("Enter an operand:\n");
+	scanf("%d", &op1);
+	}else{
+	printf("Enter operands:\n");
+	scanf("%d %d", &op1, &op2);
+	}
+	write(sockfd,&operator,10);
+	write(sockfd,&op1,sizeof(op1));
+	write(sockfd,&op2,sizeof(op2));
+	read(sockfd,&result,sizeof(result)); 
+	printf("Operation result from server=%d\n",result);  
+	close(sockfd);
 }
