@@ -5,5 +5,4 @@ set ylabel "Congestion Window"
 set autoscale 
 set grid
 set style data lines
-plot "../Tcwnd.tr"  with lines title "Tahoe",\
-"../Rcwnd.tr" with lines title "Reno"
+plot "../Tcwnd.tr"  with lines title "Tahoe","../Rcwnd.tr" with lines title "Reno"
