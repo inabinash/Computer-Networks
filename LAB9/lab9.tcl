@@ -4,7 +4,6 @@
 set val(chan)           Channel/WirelessChannel    ;# channel type
 set val(prop)           Propagation/TwoRayGround   ;# radio-propagation model
 set val(netif)          Phy/WirelessPhy            ;# network interface type
-
 set val(mac)            Mac/802_11                 ;# MAC type
 set val(ifq)            Queue/DropTail/PriQueue    ;# interface queue type
 set val(ll)             LL                         ;# link layer type
@@ -16,7 +15,10 @@ set val(x)              800                        ;# X dimension of topography
 set val(y)              800                        ;# Y dimension of topography
 set val(stop)           100                        ;# time of simulation end
 
+# Create the simulator object
 set ns          [new Simulator]
+
+# Create trace file and nam file
 set tracefd       [open testAODV.tr w]
 set windowVsTime2 [open win.tr w]
 set namtrace      [open my.nam w]
@@ -26,15 +28,13 @@ $ns namtrace-all-wireless $namtrace $val(x) $val(y)
 
 # set up topography object
 set topo       [new Topography]
-
 $topo load_flatgrid $val(x) $val(y)
 
+
+#create GOD General Object for Delegation 
 create-god $val(nn)
 
-#
 #  Create nn mobilenodes [$val(nn)] and attach them to the channel.
-#
-
 # configure the nodes
         $ns node-config -adhocRouting $val(rp) \
              -llType $val(ll) \

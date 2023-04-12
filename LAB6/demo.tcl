@@ -1,6 +1,7 @@
 set ns [ new Simulator ]
-set n0 [$ns node]
-set n1 [$ns node]
+for {set i 0} {$i < 2} {incr i} {
+    set n[expr $i] [$ns node]
+}
 
 $ns color 1 Blue
 set nf [ open out.nam  w ]
@@ -25,15 +26,10 @@ set udp [new Agent/UDP]
 set cbr [ new Application/Traffic/CBR ]
 $udp set fid_ 1
 $cbr set packetSize_ 1000
-
-
-
 $cbr attach-agent $udp
 $ns attach-agent $n0 $udp
-
 set null0 [new Agent/Null]
 $ns attach-agent $n1 $null0
-
 $ns connect $udp $null0
 
 
